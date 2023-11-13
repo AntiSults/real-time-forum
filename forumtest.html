@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="top-bar">
+      <div class="bar-content">
+        <button id="home">HOME</button>
+      </div>
+    </div>
+    <div class="post-creating">
+      <h1>Create a new post!</h1>
+      <form action="/createPost">
+        <label for="title">Post title</label>
+        <input type="text" id="title" name="title" />
+        <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        <button id="submit-post">Post!</button>
+      </form>
+    </div>
+  </body>
+</html>
