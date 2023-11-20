@@ -1,6 +1,6 @@
 import { register } from "./register.js";
 import { login } from "./login.js";
-import { createPost } from "./posts.js";
+import { createPost, showPosts } from "./posts.js";
 
 var pages = {
   register: function () {
@@ -78,7 +78,8 @@ var pages = {
         <button id="create-post">New post!</button>
       </div>
     </div>
-    <div class="content"></div>`;
+    <div class="content" id="content"></div>`;
+
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
     document
@@ -86,6 +87,10 @@ var pages = {
       .addEventListener("click", function () {
         navigate("createPost");
       });
+    document.getElementById("home").addEventListener("click", function () {
+      navigate("homepage");
+    });
+    showPosts();
   },
   createPost: function () {
     var html = `<div class="top-bar">
@@ -114,6 +119,32 @@ var pages = {
         event.preventDefault();
         createPost();
       });
+    document.getElementById("home").addEventListener("click", function () {
+      navigate("homepage");
+    });
+  },
+  postPage: function () {
+    var html = `<div class="top-bar">
+      <div class="bar-content">
+        <button id="home">HOME</button>
+        <button id="create-post">New post!</button>
+      </div>
+    </div>
+    <div id="post-page-container">
+      <div id="post-title">Kaka</div>
+      <div id="post-poster">aadu</div>
+      <div id="post-content">Joukijougen neeger</div>
+    </div>`;
+    var appDiv = document.getElementById("app");
+    appDiv.innerHTML = html;
+    document
+      .getElementById("create-post")
+      .addEventListener("click", function () {
+        navigate("createPost");
+      });
+    document.getElementById("home").addEventListener("click", function () {
+      navigate("homepage");
+    });
   },
 };
 

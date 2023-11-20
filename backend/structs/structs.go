@@ -16,3 +16,11 @@ type User struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+
+type PostData struct {
+	Id         string `json:"id"`
+	Title      string `json:"title"`
+	Poster     string `json:"poster"`
+	Content    string `json:"content"`
+	Categories string `json:"categories"`
+}

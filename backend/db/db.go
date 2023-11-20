@@ -19,7 +19,7 @@ func CreateTables(){
 		log.Println("Error in creating table")
 	}
 	statement.Exec()
-	posts, err := db.Prepare("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY, poster TEXT, categories TEXT, content TEXT, FOREIGN KEY (poster) REFERENCES users(nickname))")
+	posts, err := db.Prepare("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY, poster TEXT, title TEXT, categories TEXT, content TEXT, FOREIGN KEY (poster) REFERENCES users(nickname))")
 	if err != nil {
 		log.Println("Error in creating table")
 	}
@@ -64,7 +64,7 @@ func InsertPost(p structs.Post) string {
 	fmt.Println(p)
 	db := OpenDatabase()
 	defer db.Close()
-	_, err := db.Exec("INSERT INTO posts (poster, categories, content) VALUES (?,?,?)", p.Poster, p.Categories, p.Content)
+	_, err := db.Exec("INSERT INTO posts (poster, title, categories, content) VALUES (?,?,?,?)", p.Poster, p.Title, p.Categories, p.Content)
 	if err != nil {
 		return err.Error()
 	}

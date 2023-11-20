@@ -30,6 +30,8 @@ func setup() {
 	http.HandleFunc("/register", register.RegHandler)
 	http.HandleFunc("/login", login.LogHandler)
 	http.HandleFunc("/createPost", posts.PostHandler)
+	http.HandleFunc("/showPosts", posts.ShowPosts)
+	http.HandleFunc("/post/", posts.PostPage)
 	fmt.Println("Listening on http://localhost:5000")
 	http.ListenAndServe(":5000", nil)
 }
