@@ -68,6 +68,8 @@ function postClicked(event) {
       navigate("postPage");
       let title = document.getElementById("post-title");
       title.innerText = p.title;
+      document.getElementById("post-poster").innerText = p.poster;
+      document.getElementById("post-content").innerText = p.content;
     })
     .catch((error) => console.error(error));
 }

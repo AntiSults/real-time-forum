@@ -75,13 +75,40 @@
 
 .post {
   margin-top: 1em;
+  padding: 0.5em;
   border: 2px solid black;
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  cursor: pointer;
 }
 
 #post-page-container {
+  border: 2px solid rgb(155, 155, 255);
+  border-radius: 10px;
+  background-color: rgb(182, 182, 255);
   margin-inline: 2em;
-  margin-top: 4em;
+  margin-top: 5em;
   display: flex;
+  flex-direction: column;
+}
+.post-header {
+  background-color: rgb(215, 215, 255);
+  border-radius: 10px;
+  align-items: baseline;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5em;
+  padding: 1em;
+}
+
+#post-title {
+  font-size: 4em;
+}
+#post-poster {
+  font-size: 1.25em;
+}
+#post-content {
+  padding: 1em;
+  font-size: 1.5em;
 }

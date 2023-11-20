@@ -96,21 +96,20 @@ var pages = {
     var html = `<div class="top-bar">
       <div class="bar-content">
         <button id="home">HOME</button>
+        <button id="create-post">New post!</button>
       </div>
     </div>
-    <div class="post-creating">
-      <h1>Create a new post!</h1>
-      <form action="/createPost">
-        <label for="title">Post title</label>
-        <input type="text" id="title" name="title" />
-        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-  <label for="vehicle1"> I have a bike</label><br>
-  <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-  <label for="vehicle2"> I have a car</label><br>
-        <textarea name="content" id="content" cols="30" rows="10"></textarea>
-        <button id="submit-post">Post!</button>
+    <div id="post-page-container">
+      <div class="post-header">
+        <div id="post-title">Kaka</div>
+        <div id="post-poster">aadu</div>
+      </div>
+      <div id="post-content"></div>
       </form>
-    </div>`;
+      </div>
+      <form action="/">
+        <textarea name="comment" id="comment-box" cols="30" rows="10"></textarea>
+        <button id="comment-submit">Comment!</button>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
     document
@@ -131,9 +130,12 @@ var pages = {
       </div>
     </div>
     <div id="post-page-container">
-      <div id="post-title">Kaka</div>
-      <div id="post-poster">aadu</div>
-      <div id="post-content">Joukijougen neeger</div>
+      <div class="post-header">
+        <div id="post-title">Kaka</div>
+        <div id="post-poster">aadu</div>
+      </div>
+      <div id="post-content"></div>
+      <button id="comment-submit">Comment!</button>
     </div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
