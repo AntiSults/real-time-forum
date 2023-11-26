@@ -48,7 +48,6 @@ func ShowPosts(w http.ResponseWriter, r *http.Request){
 			}
 			posts = append(posts, post)
 		}
-		fmt.Println(posts[0].Content)
 		w.Header().Set("Content-Type", "application/json")
   		json.NewEncoder(w).Encode(posts)
 	}
@@ -71,5 +70,45 @@ func PostPage(w http.ResponseWriter, r *http.Request){
 		if err != nil {
 			log.Println(err)
 		}
+	}
+}
+
+func SubmitComment(w http.ResponseWriter, r *http.Request){
+	if r.Method == "POST" {
+		db := db.OpenDatabase()
+		defer db.Close()
+		var comment structs.Comment
+		json.NewDecoder(r.Body).Decode(&comment)
+		
+		_, err := db.Exec("INSERT INTO comments (commenter, comment, postID) values (?,?,?)", comment.User, comment.Comment, comment.PostID)
+		fmt.Println(comment)
+		if err != nil {
+			fmt.Println(err)
+			json.NewEncoder(w).Encode("error inserting")
+		}
+		json.NewEncoder(w).Encode("success")
+	}
+}
+
+func ShowComments(w http.ResponseWriter, r *http.Request){
+	if r.Method == "GET" {
+		postID := r.URL.Query().Get("postid")
+		comments := make([]structs.Comment, 0)
+		db := db.OpenDatabase()
+		defer db.Close()
+		rows, err := db.Query("SELECT * FROM comments WHERE postID = ?", postID)
+		if err != nil {
+			json.NewEncoder(w).Encode("error getting the query")
+		}
+		for rows.Next() {
+			var comment structs.Comment
+			err := rows.Scan(&comment.ID, &comment.User, &comment.Comment, &comment.PostID)
+			if err != nil {
+				json.NewEncoder(w).Encode(err)
+			}
+			comments = append(comments, comment)
+		}
+		w.Header().Set("Content-Type", "application/json")
+  		json.NewEncoder(w).Encode(comments)
 	}
 }

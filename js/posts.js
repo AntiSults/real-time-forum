@@ -60,6 +60,35 @@ function showPosts() {
 
 function postClicked(event) {
   let id = event.target.dataset.postid;
+  goToPostPage(id);
+}
+
+function submitComment() {
+  let comment = document.getElementById("comment-box").value;
+  let postID = document.getElementById("post-title").dataset.postid;
+  var data = {
+    postID: postID,
+    user: currentUser,
+    comment: comment,
+  };
+  fetch("/comment", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((respone) => respone.json())
+    .then((response) => {
+      if (response !== "success") {
+        console.log(response);
+      } else {
+        goToPostPage(postID);
+      }
+    });
+}
+
+function goToPostPage(id) {
   fetch(`/post/${id}`, {
     method: "GET",
   })
@@ -70,8 +99,29 @@ function postClicked(event) {
       title.innerText = p.title;
       document.getElementById("post-poster").innerText = p.poster;
       document.getElementById("post-content").innerText = p.content;
+      document.getElementById("post-title").dataset.postid = id;
+      console.log(document.querySelector("post-header"));
     })
     .catch((error) => console.error(error));
+  fetch(`/showComments/?postid=${id}`, {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((response) => {
+      for (let comment of response) {
+        const commentDiv = document.getElementById("comment-section");
+        const div = document.createElement("div");
+        div.classList.add("comment-comment");
+        const commenter = document.createElement("p");
+        commenter.classList.add("commenter");
+        commenter.innerText = comment.user;
+        const message = document.createElement("p");
+        message.classList.add("message");
+        message.innerText = comment.comment;
+        div.append(commenter, message);
+        commentDiv.append(div);
+      }
+    });
 }
 
-export { createPost, showPosts };
+export { createPost, showPosts, submitComment };

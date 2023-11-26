@@ -105,10 +105,44 @@
 #post-title {
   font-size: 4em;
 }
+
 #post-poster {
   font-size: 1.25em;
 }
+
 #post-content {
   padding: 1em;
   font-size: 1.5em;
+}
+
+#comment-section {
+  display: flex;
+  flex-direction: column;
+  margin: 2em;
+  border: 2px solid rgb(255, 255, 191);
+  border-radius: 10px;
+  background-color: beige;
+}
+
+.comment-comment {
+  background-color: rgb(255, 255, 200);
+  border-radius: 10px;
+  padding: 1em;
+  margin: 1em;
+}
+
+#users {
+  margin-top: 3em;
+  display: flex;
+  flex-direction: column;
+}
+
+.user {
+  padding: 0.5em;
+  border: 2px solid black;
+  width: 10em;
+}
+
+.user p {
+  align-self: end;
 }

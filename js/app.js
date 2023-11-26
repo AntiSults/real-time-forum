@@ -1,6 +1,7 @@
 import { register } from "./register.js";
 import { login } from "./login.js";
-import { createPost, showPosts } from "./posts.js";
+import { createPost, showPosts, submitComment } from "./posts.js";
+import { setupWs, testSend, populateUsers, goToChat } from "./websocket.js";
 
 var pages = {
   register: function () {
@@ -76,6 +77,7 @@ var pages = {
       <div class="bar-content">
         <button id="home">HOME</button>
         <button id="create-post">New post!</button>
+        <button id="pm">PM</button>
       </div>
     </div>
     <div class="content" id="content"></div>`;
@@ -90,26 +92,31 @@ var pages = {
     document.getElementById("home").addEventListener("click", function () {
       navigate("homepage");
     });
+    document.getElementById("pm").addEventListener("click", function () {
+      setupWs();
+      navigate("pm");
+    });
     showPosts();
   },
   createPost: function () {
     var html = `<div class="top-bar">
       <div class="bar-content">
         <button id="home">HOME</button>
-        <button id="create-post">New post!</button>
       </div>
-    </div>
-    <div id="post-page-container">
-      <div class="post-header">
-        <div id="post-title">Kaka</div>
-        <div id="post-poster">aadu</div>
-      </div>
-      <div id="post-content"></div>
+       </div>
+    <div class="post-creating">
+      <h1>Create a new post!</h1>
+      <form action="/createPost">
+        <label for="title">Post title</label>
+        <input type="text" id="title" name="title" />
+        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
+  <label for="vehicle1"> I have a bike</label><br>
+  <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
+  <label for="vehicle2"> I have a car</label><br>
+        <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        <button id="submit-post">Post!</button>
       </form>
-      </div>
-      <form action="/">
-        <textarea name="comment" id="comment-box" cols="30" rows="10"></textarea>
-        <button id="comment-submit">Comment!</button>`;
+    </div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
     document
@@ -131,12 +138,25 @@ var pages = {
     </div>
     <div id="post-page-container">
       <div class="post-header">
-        <div id="post-title">Kaka</div>
-        <div id="post-poster">aadu</div>
+        <div id="post-title"></div>
+        <div id="post-poster"></div>
       </div>
       <div id="post-content"></div>
-      <button id="comment-submit">Comment!</button>
-    </div>`;
+    </div>
+    <div id="comment-container">
+      <form action="/">
+      <label for="comment">Comment</label>
+        <textarea
+          name="comment-box"
+          id="comment-box"
+          cols="30"
+          rows="10"
+          required
+        ></textarea>
+        <button id="comment-submit">Comment!</button>
+      </form>
+    </div>
+    <div id="comment-section"></div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
     document
@@ -147,11 +167,75 @@ var pages = {
     document.getElementById("home").addEventListener("click", function () {
       navigate("homepage");
     });
+    document
+      .getElementById("comment-submit")
+      .addEventListener("click", function (e) {
+        e.preventDefault();
+        submitComment();
+      });
+  },
+  pm: function () {
+    var html = `
+    <div class="top-bar">
+      <div class="bar-content">
+        <button id="home">HOME</button>
+        <button id="create-post">New post!</button>
+        <button id="sendmessage">SendMessage</button>
+      </div>
+    </div>
+    <div id="users"></div>
+    `;
+    var appDiv = document.getElementById("app");
+    appDiv.innerHTML = html;
+    populateUsers();
+    document.getElementById("home").addEventListener("click", function () {
+      navigate("homepage");
+    });
+    document
+      .getElementById("sendmessage")
+      .addEventListener("click", function () {
+        testSend();
+      });
+  },
+  chat: function (user) {
+    var html = `
+    <div class="top-bar">
+      <div class="bar-content">
+        <button id="home">HOME</button>
+        <button id="create-post">New post!</button>
+        <button id="sendmessage">SendMessage</button>
+      </div>
+    </div>
+    <div id="chat"></div>
+    <div class="chatbox">
+      <form action="/">
+        <textarea
+          name="send-message"
+          id="send-message"
+          cols="30"
+          rows="10"
+          required
+        ></textarea>
+        <button id="submit-message">Send</button>
+      </form>
+    </div>
+    `;
+    var appDiv = document.getElementById("app");
+    appDiv.innerHTML = html;
+    goToChat(user);
+    document
+      .getElementById("sendmessage")
+      .addEventListener("click", function () {
+        testSend();
+      });
+    document.getElementById("home").addEventListener("click", function () {
+      navigate("homepage");
+    });
   },
 };
 
-window.navigate = function (page) {
-  pages[page]();
+window.navigate = function (page, ...args) {
+  pages[page].apply(null, args);
 };
 
 navigate("register");

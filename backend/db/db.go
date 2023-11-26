@@ -24,11 +24,17 @@ func CreateTables(){
 		log.Println("Error in creating table")
 	}
 	posts.Exec()
-	comments, err := db.Prepare("CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY, commenter TEXT, comment TEXT, post INTEGER)")
+	comments, err := db.Prepare("CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY, commenter TEXT, comment TEXT, postID TEXT)")
 	if err != nil {
 		log.Println("Error in creating table")
 	}
 	comments.Exec()
+	messages, err := db.Prepare("CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, user TEXT, recipient TEXT, message TEXT, timestamp DATETIME DEFAULT CURRENT_TIMESTAMP)")
+	if err != nil {
+		log.Println("Error in creating table")
+	}
+	messages.Exec()
+	
 }
 
 func InsertUser(u structs.User) error{

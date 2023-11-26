@@ -9,6 +9,7 @@ import (
 	"real-time-forum/backend/login"
 	"real-time-forum/backend/posts"
 	"real-time-forum/backend/register"
+	"real-time-forum/backend/ws"
 	"text/template"
 )
 
@@ -32,6 +33,11 @@ func setup() {
 	http.HandleFunc("/createPost", posts.PostHandler)
 	http.HandleFunc("/showPosts", posts.ShowPosts)
 	http.HandleFunc("/post/", posts.PostPage)
+	http.HandleFunc("/comment", posts.SubmitComment)
+	http.HandleFunc("/showComments/", posts.ShowComments)
+	http.HandleFunc("/ws", ws.WsHandler)
+	http.HandleFunc("/getUsers", ws.GetUsersHandler)
+	http.HandleFunc("/loadChat", ws.LoadChat)
 	fmt.Println("Listening on http://localhost:5000")
 	http.ListenAndServe(":5000", nil)
 }
