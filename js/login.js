@@ -24,12 +24,9 @@ function login() {
     })
     .then(function (response) {
       if (response.loginSuccessful) {
-        console.log("Login successful");
         currentUser = response.currentUser;
         window.navigate("homepage");
-        // Redirect to another page or update the UI
       } else {
-        console.log("Login failed: " + response.errorMessage);
         alert(response.errorMessage);
       }
     })

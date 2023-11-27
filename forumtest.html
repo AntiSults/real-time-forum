@@ -10,45 +10,21 @@
     <div class="top-bar">
       <div class="bar-content">
         <button id="home">HOME</button>
-        <button id="create-post">New post!</button>
       </div>
     </div>
-    <div id="chat">
-      <div class="msg">
-        <h1 class="sender">anti</h1>
-        <p class="timestamp">2023-11-25T16:31:04Z</p>
-        <p class="message">jou</p>
-      </div>
-      <div class="msg">
-        <h1 class="sender">elle</h1>
-        <p class="timestamp">2023-11-25T16:31:26Z</p>
-        <p class="message">sa oled pede</p>
-      </div>
-      <div class="msg">
-        <h1 class="sender">anti</h1>
-        <p class="timestamp">2023-11-25T16:37:35Z</p>
-        <p class="message">ilus neiu oled :P</p>
-      </div>
-      <div class="msg">
-        <h1 class="sender">anti</h1>
-        <p class="timestamp">2023-11-25T18:04:30Z</p>
-        <p class="message">kakapeerpuuks</p>
-      </div>
-      <div class="msg">
-        <h1 class="sender">anti</h1>
-        <p class="timestamp">2023-11-25T18:14:07Z</p>
-        <p class="message">jou</p>
-      </div>
-    </div>
-    <div class="chatbox">
-      <form action="/">
-        <textarea
-          name="send-message"
-          id="send-message"
-          cols="30"
-          rows="10"
-        ></textarea>
-        <button id="submit-message">Send</button>
+    <div class="post-creating">
+      <h1>Create a new post!</h1>
+      <form action="/createPost">
+        <label for="title">Post title</label>
+        <input type="text" id="title" name="title" />
+        <input type="checkbox" id="animal1" name="animal1" value="Cats" />
+        <label for="animal1"> Cats</label><br />
+        <input type="checkbox" id="animal2" name="animal2" value="Dogs" />
+        <label for="animal2"> Dogs</label><br />
+        <input type="checkbox" id="animal3" name="animal3" value="Dogs" />
+        <label for="animal3"> Other</label><br />
+        <textarea name="content" id="content" cols="30" rows="10"></textarea>
+        <button id="submit-post">Post!</button>
       </form>
     </div>
   </body>

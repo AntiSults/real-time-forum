@@ -29,7 +29,11 @@ func LogHandler(w http.ResponseWriter, r *http.Request) {
 		if errs != "" {
 			json.NewEncoder(w).Encode(loginResponse{LoginSuccessful: false, ErrorMessage: errs})
 		} else if success {
-  			json.NewEncoder(w).Encode(loginResponse{LoginSuccessful: true, CurrentUser: data["email"]})
+			nick, err := getUser(data["email"])
+			if err != nil {
+				json.NewEncoder(w).Encode("Error getting nickname")
+			}
+  			json.NewEncoder(w).Encode(loginResponse{LoginSuccessful: true, CurrentUser: nick})
 		} else {
   			json.NewEncoder(w).Encode(loginResponse{LoginSuccessful: false, ErrorMessage: "Invalid email or password"})
 		}
@@ -38,16 +42,25 @@ func LogHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func getUser(email string) (string, error) {
+	db := db.OpenDatabase()
+	var user string
+	err := db.QueryRow("SELECT nick FROM users WHERE email = ? OR nick = ?", email, email).Scan(&user)
+	if err != nil {
+		return "", err
+	}
+	return user, nil
+}
+
 func loginSuccessful(data map[string]string) (bool, string) {
 	db := db.OpenDatabase()
 	defer db.Close()
-
+	fmt.Println("email", data["email"], "user",data["username"])
 	var hashedPassword string
-		err := db.QueryRow("SELECT password FROM users WHERE email = ?", data["email"]).Scan(&hashedPassword)
+		err := db.QueryRow("SELECT password FROM users WHERE email = ? OR nick = ?", data["email"], data["email"]).Scan(&hashedPassword)
 		if err != nil{
 			if err == sql.ErrNoRows {
-					// Email not found
-				return false, "Email not found"
+				return false, "Email or username not found"
 			} else {
 				return false, "Internal server error"
 			}

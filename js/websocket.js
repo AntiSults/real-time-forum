@@ -20,6 +20,7 @@ function sendMessage(event) {
   let year = date.getFullYear();
 
   let currentDate = month + "-" + day + "-" + year;
+  const chat = document.getElementById("chat");
 
   const container = document.createElement("div");
   container.classList.add("msg");
@@ -44,6 +45,7 @@ function setupWs() {
     console.log("Connection established!");
   };
   conn.onmessage = function (e) {
+    const chat = document.getElementById("chat");
     let data = e.data.split("|");
     let message = data[0];
     let sender = data[1];

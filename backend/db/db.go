@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"real-time-forum/backend/structs"
+	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/crypto/bcrypt"
@@ -75,7 +76,8 @@ func InsertPost(p structs.Post) string {
 	fmt.Println(p)
 	db := OpenDatabase()
 	defer db.Close()
-	_, err := db.Exec("INSERT INTO posts (poster, title, categories, content) VALUES (?,?,?,?)", p.Poster, p.Title, p.Categories, p.Content)
+	categories := strings.Join(p.Categories, "|")
+	_, err := db.Exec("INSERT INTO posts (poster, title, categories, content) VALUES (?,?,?,?)", p.Poster, p.Title, categories, p.Content)
 	if err != nil {
 		return err.Error()
 	}

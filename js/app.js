@@ -10,7 +10,7 @@ var pages = {
           <label for="nickname">Nickname:</label>
           <input type="text" id="nickname" name="nickname" required />
           <label for="age">age:</label>
-          <input type="text" id="age" name="age" required />
+          <input type="number" id="age" name="age" required />
           <p>Gender:</p>
           <input type="radio" id="male" name="gender" value="male" required />
           <label for="male">male</label>
@@ -25,7 +25,7 @@ var pages = {
           <label for="email">email:</label>
           <input type="text" id="email" name="email" required />
           <label for="password">password:</label>
-          <input type="text" id="password" name="password" required />
+          <input type="password" id="password" name="password" required />
           <button id="submitreg">Submit</button>
           <p>Already got an account? <a id="login" href="#">Log in</a></p>
         </form>
@@ -57,7 +57,7 @@ var pages = {
           <label for="email">Email: </label>
           <input type="text" id="email" name="email" required/>
           <label for="password">Password: </label>
-          <input type="text" id="password" name="password" required/>
+          <input type="password" id="password" name="password" required/>
           <button id="submitlogin">Log in</button>
         </form>
       </div>
@@ -68,7 +68,7 @@ var pages = {
       .getElementById("submitlogin")
       .addEventListener("click", function (event) {
         event.preventDefault();
-        console.log(event);
+        setupWs();
         login();
       });
   },
@@ -103,16 +103,18 @@ var pages = {
       <div class="bar-content">
         <button id="home">HOME</button>
       </div>
-       </div>
+    </div>
     <div class="post-creating">
       <h1>Create a new post!</h1>
       <form action="/createPost">
         <label for="title">Post title</label>
         <input type="text" id="title" name="title" />
-        <input type="checkbox" id="vehicle1" name="vehicle1" value="Bike">
-  <label for="vehicle1"> I have a bike</label><br>
-  <input type="checkbox" id="vehicle2" name="vehicle2" value="Car">
-  <label for="vehicle2"> I have a car</label><br>
+        <input type="checkbox" id="animal1" name="animal1" value="Cats" />
+        <label for="animal1"> Cats</label><br />
+        <input type="checkbox" id="animal2" name="animal2" value="Dogs" />
+        <label for="animal2"> Dogs</label><br />
+        <input type="checkbox" id="animal3" name="animal3" value="Other" />
+        <label for="animal3"> Other</label><br />
         <textarea name="content" id="content" cols="30" rows="10"></textarea>
         <button id="submit-post">Post!</button>
       </form>

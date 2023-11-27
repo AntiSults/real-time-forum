@@ -3,12 +3,21 @@ import { currentUser } from "./login.js";
 function createPost() {
   var title = document.getElementById("title").value;
   var content = document.getElementById("content").value;
-
+  var categories = [];
+  if (document.getElementById("animal1").checked) {
+    categories.push(document.getElementById("animal1").value);
+  }
+  if (document.getElementById("animal2").checked) {
+    categories.push(document.getElementById("animal2").value);
+  }
+  if (document.getElementById("animal3").checked) {
+    categories.push(document.getElementById("animal3").value);
+  }
   var data = {
     poster: currentUser,
     title: title,
     content: content,
-    categories: "kaka, peer",
+    categories: categories,
   };
   fetch("/createPost", {
     method: "POST",
@@ -38,7 +47,6 @@ function showPosts() {
   })
     .then((response) => response.json())
     .then((posts) => {
-      console.log(posts);
       const postsDiv = document.createElement("div");
       postsDiv.setAttribute("id", "posts");
       for (let post of posts) {
@@ -59,7 +67,7 @@ function showPosts() {
 }
 
 function postClicked(event) {
-  let id = event.target.dataset.postid;
+  let id = event.currentTarget.dataset.postid;
   goToPostPage(id);
 }
 
@@ -100,7 +108,6 @@ function goToPostPage(id) {
       document.getElementById("post-poster").innerText = p.poster;
       document.getElementById("post-content").innerText = p.content;
       document.getElementById("post-title").dataset.postid = id;
-      console.log(document.querySelector("post-header"));
     })
     .catch((error) => console.error(error));
   fetch(`/showComments/?postid=${id}`, {

@@ -6,7 +6,7 @@ type Post struct {
 	Poster     string `json:"poster"`
 	Title      string `json:"title"`
 	Content    string `json:"content"`
-	Categories string `json:"categories"`
+	Categories []string `json:"categories"`
 }
 
 type User struct {

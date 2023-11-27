@@ -18,6 +18,14 @@ func RegHandler(w http.ResponseWriter, r *http.Request){
     		json.NewEncoder(w).Encode("error decoding")
       		return
     	}
+		switch{
+			case len(u.Nickname) < 3:
+				json.NewEncoder(w).Encode("Nickname too short")
+			case len(u.Fname) < 3:
+				json.NewEncoder(w).Encode("First name too short")
+			case len(u.Lname) < 3:
+				json.NewEncoder(w).Encode("Last name too short")
+		}
 		err = db.InsertUser(u)
 		if err != nil {
 			json.NewEncoder(w).Encode("error inserting to database, this may indicate the nickname or email is already registered")
