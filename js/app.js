@@ -68,8 +68,8 @@ var pages = {
       .getElementById("submitlogin")
       .addEventListener("click", function (event) {
         event.preventDefault();
-        setupWs();
         login();
+        //setupWs();
       });
   },
   homepage: function () {
@@ -80,10 +80,11 @@ var pages = {
         <button id="pm">PM</button>
       </div>
     </div>
-    <div class="content" id="content"></div>`;
-
+    <div class="content" id="content"></div>
+    <div id="users"></div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
+
     document
       .getElementById("create-post")
       .addEventListener("click", function () {
@@ -93,9 +94,10 @@ var pages = {
       navigate("homepage");
     });
     document.getElementById("pm").addEventListener("click", function () {
-      setupWs();
+      //setupWs();
       navigate("pm");
     });
+    populateUsers();
     showPosts();
   },
   createPost: function () {

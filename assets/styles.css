@@ -143,5 +143,12 @@
   width: 10em;
 }
 
+.user[data-status="online"] {
+  background-color: green;
+}
+.user[data-status="offline"] {
+  background-color: red;
+}
+
 .user p {
 }

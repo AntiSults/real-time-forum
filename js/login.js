@@ -1,3 +1,5 @@
+import { setupWs } from "./websocket.js";
+
 let currentUser;
 
 function login() {
@@ -25,6 +27,7 @@ function login() {
     .then(function (response) {
       if (response.loginSuccessful) {
         currentUser = response.currentUser;
+        setupWs();
         window.navigate("homepage");
       } else {
         alert(response.errorMessage);
