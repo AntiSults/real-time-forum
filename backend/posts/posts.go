@@ -103,6 +103,7 @@ func ShowComments(w http.ResponseWriter, r *http.Request){
 		for rows.Next() {
 			var comment structs.Comment
 			err := rows.Scan(&comment.ID, &comment.User, &comment.Comment, &comment.PostID)
+			fmt.Println("comments:", comments)
 			if err != nil {
 				json.NewEncoder(w).Encode(err)
 			}

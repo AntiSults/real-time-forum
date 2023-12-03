@@ -131,7 +131,13 @@
   margin: 1em;
 }
 
+#user-list {
+  top: 0;
+}
+
 #users {
+  position: fixed;
+  z-index: 100;
   margin-top: 3em;
   display: flex;
   flex-direction: column;

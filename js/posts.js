@@ -97,12 +97,12 @@ function submitComment() {
 }
 
 function goToPostPage(id) {
+  navigate("postPage");
   fetch(`/post/${id}`, {
     method: "GET",
   })
     .then((response) => response.json())
     .then((p) => {
-      navigate("postPage");
       let title = document.getElementById("post-title");
       title.innerText = p.title;
       document.getElementById("post-poster").innerText = p.poster;
@@ -116,6 +116,7 @@ function goToPostPage(id) {
     .then((response) => response.json())
     .then((response) => {
       for (let comment of response) {
+        console.log(comment);
         const commentDiv = document.getElementById("comment-section");
         const div = document.createElement("div");
         div.classList.add("comment-comment");

@@ -8,9 +8,9 @@ var pages = {
     var html = `<div class="registration">
         <form action="/register">
           <label for="nickname">Nickname:</label>
-          <input type="text" id="nickname" name="nickname" required />
+          <input type="text" id="nickname" name="nickname" placeholder="Nickname [2+ characters]"required />
           <label for="age">age:</label>
-          <input type="number" id="age" name="age" required />
+          <input type="number" id="age" name="age" placeholder="Age[0+]"required />
           <p>Gender:</p>
           <input type="radio" id="male" name="gender" value="male" required />
           <label for="male">male</label>
@@ -19,13 +19,13 @@ var pages = {
           <input type="radio" id="other" name="gender" value="other" />
           <label for="other">other</label>
           <label for="fname">first name:</label>
-          <input type="text" id="fname" name="fname" required />
+          <input type="text" id="fname" name="fname" placeholder="First name [2+ characters]"required />
           <label for="lname">last name:</label>
-          <input type="text" id="lname" name="lname" required />
+          <input type="text" id="lname" name="lname" required placeholder="Last name [2+ characters]"/>
           <label for="email">email:</label>
-          <input type="text" id="email" name="email" required />
+          <input type="text" id="email" name="email" required placeholder="Email [valid email aadress]"/>
           <label for="password">password:</label>
-          <input type="password" id="password" name="password" required />
+          <input type="password" id="password" name="password" required placeholder="Password [2+ characters]"/>
           <button id="submitreg">Submit</button>
           <p>Already got an account? <a id="login" href="#">Log in</a></p>
         </form>
