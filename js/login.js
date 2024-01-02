@@ -27,6 +27,7 @@ function login() {
     .then(function (response) {
       if (response.loginSuccessful) {
         currentUser = response.currentUser;
+        //addCookie(response);
         setupWs();
         window.navigate("homepage");
       } else {
@@ -39,4 +40,9 @@ function login() {
     });
 }
 
-export { login, currentUser };
+function logout() {
+  document.cookie = "username=; Max-age=0; path=/";
+  window.navigate("login");
+}
+
+export { login, currentUser, logout };

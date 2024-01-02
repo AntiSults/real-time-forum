@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"net/http"
 	"real-time-forum/backend/db"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -32,6 +33,10 @@ func LogHandler(w http.ResponseWriter, r *http.Request) {
 			nick, err := getUser(data["email"])
 			if err != nil {
 				json.NewEncoder(w).Encode("Error getting nickname")
+			} else {
+				expiration := time.Now().Add(24 * time.Hour)
+				cookie := http.Cookie{Name: "username", Value: nick, Expires: expiration}
+				http.SetCookie(w, &cookie)
 			}
   			json.NewEncoder(w).Encode(loginResponse{LoginSuccessful: true, CurrentUser: nick})
 		} else {

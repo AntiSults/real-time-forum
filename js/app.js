@@ -1,10 +1,14 @@
 import { register } from "./register.js";
-import { login } from "./login.js";
+import { login, logout } from "./login.js";
 import { createPost, showPosts, submitComment } from "./posts.js";
 import { setupWs, testSend, populateUsers, goToChat } from "./websocket.js";
 
 var pages = {
   register: function () {
+    if (document.cookie != "") {
+      window.navigate("homepage");
+      return;
+    }
     var html = `<div class="registration">
         <form action="/register">
           <label for="nickname">Nickname:</label>
@@ -78,6 +82,8 @@ var pages = {
         <button id="home">HOME</button>
         <button id="create-post">New post!</button>
         <button id="pm">PM</button>
+        <h id="current-user"></h>
+        <button id="logout">Log out</button>
       </div>
     </div>
     <div class="content" id="content"></div>
@@ -97,6 +103,10 @@ var pages = {
       //setupWs();
       navigate("pm");
     });
+    document.getElementById("logout").addEventListener("click", logout);
+    document.getElementById("current-user").innerText = getUserFromCookie(
+      document.cookie
+    );
     populateUsers();
     showPosts();
   },
@@ -237,6 +247,10 @@ var pages = {
     });
   },
 };
+
+function getUserFromCookie(cookie) {
+  return cookie.match(/username=(\w+)/)[1];
+}
 
 window.navigate = function (page, ...args) {
   pages[page].apply(null, args);
