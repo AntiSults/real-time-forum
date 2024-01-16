@@ -34,18 +34,18 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 	clients[username] = client
 
 	messageToSend := structs.MessageStatus{
-		Type: "user_status_update",
-		User: username,
+		Type:   "user_status_update",
+		User:   username,
 		Status: "online",
 	}
 	broadcastToAllClients(clients, messageToSend)
 	defer func() {
 		messageToSend := structs.MessageStatus{
-		Type: "user_status_update",
-		User: username,
-		Status: "offline",
-	}
-	broadcastToAllClients(clients, messageToSend)
+			Type:   "user_status_update",
+			User:   username,
+			Status: "offline",
+		}
+		broadcastToAllClients(clients, messageToSend)
 		delete(clients, username)
 	}()
 	db := db.OpenDatabase()
@@ -58,7 +58,7 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 		messageAndUsername := strings.Split(string(p), "|")
 		message := messageAndUsername[0]
 		recipientUsername := messageAndUsername[1]
-
+		fmt.Println("mau", messageAndUsername)
 		if _, err := db.Exec("INSERT INTO messages (user, recipient, message) values (?,?,?)", username, recipientUsername, message); err != nil {
 			fmt.Println(err)
 		}
@@ -66,10 +66,11 @@ func WsHandler(w http.ResponseWriter, r *http.Request) {
 		recipientClient, ok := clients[recipientUsername]
 		if ok {
 			messageToSend := structs.MessageToJS{
-				Type: "private_message",
+				Type:    "private_message",
 				Message: message,
-				Sender: username,
-				Time: time.Now().Format("01-02-2006"),
+				Sender:  username,
+				To:      recipientUsername,
+				Time:    time.Now().Format("01-02-2006"),
 			}
 			jsonMessage, err := json.Marshal(messageToSend)
 			if err != nil {
@@ -99,37 +100,51 @@ type UserTemp struct {
 	CurrentUser string `json:"currentUser"`
 }
 
-func GetUsersHandler(w http.ResponseWriter, r *http.Request){
+func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	var users UserTemp
 	err := json.NewDecoder(r.Body).Decode(&users)
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 	}
-	fmt.Println(users)
+	fmt.Println("tf", users)
 	db := db.OpenDatabase()
 	defer db.Close()
+	//	rows, err := db.Query(`
+	//	SELECT users.nick, users.age, users.gender, users.fname, users.lname, users.email,
+	//	CASE
+	//		WHEN MAX(sent_messages.timestamp) IS NULL AND MAX(received_messages.timestamp) IS NULL THEN ''
+	//		WHEN MAX(sent_messages.timestamp) IS NULL THEN STRFTIME('%Y-%m-%d %H:%M:%f', MAX(received_messages.timestamp))
+	//		WHEN MAX(received_messages.timestamp) IS NULL THEN STRFTIME('%Y-%m-%d %H:%M:%f', MAX(sent_messages.timestamp))
+	//		ELSE STRFTIME('%Y-%m-%d %H:%M:%f', CASE WHEN MAX(sent_messages.timestamp) > MAX(received_messages.timestamp) THEN MAX(sent_messages.timestamp) ELSE MAX(received_messages.timestamp) END)
+	//	END as latest_message_time
+	//	FROM users
+	//	LEFT JOIN messages AS sent_messages ON users.nick = sent_messages.user
+	//	LEFT JOIN messages AS received_messages ON users.nick = received_messages.recipient
+	//	GROUP BY users.nick, users.age, users.gender, users.fname, users.lname, users.email
+	//	ORDER BY latest_message_time DESC
+	//
+	// `)
 	rows, err := db.Query(`
-	SELECT users.nick, users.age, users.gender, users.fname, users.lname, users.email,
-	CASE
-		WHEN MAX(sent_messages.timestamp) IS NULL AND MAX(received_messages.timestamp) IS NULL THEN ''
-		WHEN MAX(sent_messages.timestamp) IS NULL THEN STRFTIME('%Y-%m-%d %H:%M:%f', MAX(received_messages.timestamp))
-		WHEN MAX(received_messages.timestamp) IS NULL THEN STRFTIME('%Y-%m-%d %H:%M:%f', MAX(sent_messages.timestamp))
-		ELSE STRFTIME('%Y-%m-%d %H:%M:%f', CASE WHEN MAX(sent_messages.timestamp) > MAX(received_messages.timestamp) THEN MAX(sent_messages.timestamp) ELSE MAX(received_messages.timestamp) END)
-	END as latest_message_time
-	FROM users
-	LEFT JOIN messages AS sent_messages ON users.nick = sent_messages.user
-	LEFT JOIN messages AS received_messages ON users.nick = received_messages.recipient
-	GROUP BY users.nick, users.age, users.gender, users.fname, users.lname, users.email
-	ORDER BY latest_message_time DESC
+    SELECT users.nick, users.age, users.gender, users.fname, users.lname, users.email,
+    CASE
+        WHEN MAX(sent_messages.timestamp) IS NULL AND MAX(received_messages.timestamp) IS NULL THEN ''
+        WHEN MAX(sent_messages.timestamp) IS NULL THEN STRFTIME('%Y-%m-%d %H:%M:%f', MAX(received_messages.timestamp))
+        WHEN MAX(received_messages.timestamp) IS NULL THEN STRFTIME('%Y-%m-%d %H:%M:%f', MAX(sent_messages.timestamp))
+        ELSE STRFTIME('%Y-%m-%d %H:%M:%f', CASE WHEN MAX(sent_messages.timestamp) > MAX(received_messages.timestamp) THEN MAX(sent_messages.timestamp) ELSE MAX(received_messages.timestamp) END)
+    END as latest_message_time
+    FROM users
+    LEFT JOIN messages AS sent_messages ON users.nick = sent_messages.user
+    LEFT JOIN messages AS received_messages ON users.nick = received_messages.recipient
+    GROUP BY users.nick, users.age, users.gender, users.fname, users.lname, users.email
+    ORDER BY COALESCE(latest_message_time, users.nick) DESC
 `)
-
 
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 		fmt.Println("perse majas", err)
 	}
 	usersArr := make([]structs.PublicUser, 0)
-	for rows.Next(){
+	for rows.Next() {
 		var user structs.PublicUser
 		var latestMessageTime string
 		err := rows.Scan(&user.Nickname, &user.Age, &user.Gender, &user.Email, &user.Fname, &user.Lname, &latestMessageTime)
@@ -137,7 +152,7 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request){
 			json.NewEncoder(w).Encode(err)
 			fmt.Println("error scanning", err)
 		}
-		if(clients[user.Nickname] != nil) {
+		if clients[user.Nickname] != nil {
 			user.Status = "online"
 		} else {
 			user.Status = "offline"
@@ -147,21 +162,24 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request){
 		}
 	}
 	w.Header().Set("Content-Type", "application/json")
-  	json.NewEncoder(w).Encode(usersArr)
+	for _, user := range usersArr {
+		fmt.Println(user.Nickname)
+	}
+	json.NewEncoder(w).Encode(usersArr)
 }
 
 func LoadChat(w http.ResponseWriter, r *http.Request) {
 	username := r.URL.Query().Get("user")
 	recipient := r.URL.Query().Get("recipient")
 
-	db:=db.OpenDatabase()
+	db := db.OpenDatabase()
 	defer db.Close()
 	messages := make([]structs.Message, 0)
-	rows, err:= db.Query("SELECT user, recipient, message, timestamp FROM messages WHERE (user = ? AND recipient = ?) OR (user = ? AND recipient = ?)", username, recipient, recipient, username)
+	rows, err := db.Query("SELECT user, recipient, message, timestamp FROM messages WHERE (user = ? AND recipient = ?) OR (user = ? AND recipient = ?)", username, recipient, recipient, username)
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 	}
-	for rows.Next(){
+	for rows.Next() {
 		var message structs.Message
 		err := rows.Scan(&message.User, &message.Recipient, &message.Message, &message.Timestamp)
 		if err != nil {
@@ -171,5 +189,5 @@ func LoadChat(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, message)
 	}
 	w.Header().Set("Content-Type", "application/json")
-  	json.NewEncoder(w).Encode(messages)
+	json.NewEncoder(w).Encode(messages)
 }

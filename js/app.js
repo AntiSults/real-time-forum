@@ -86,11 +86,24 @@ var pages = {
         <button id="logout">Log out</button>
       </div>
     </div>
-    <div class="content" id="content"></div>
-    <div id="users"></div>`;
+    <div id=homePageContainer>
+      <div class="content" id="content"></div>
+      <div id="users"></div>
+      <div id="chat-container">
+        <div id="chat-header">
+          <span id="chat-title"><span id="chat-username"></span></span>
+          <button id="close-chat">❌</button>
+        </div>
+        <div id="chat-messages"></div>
+        <textarea id="message-input" placeholder="Type your message"></textarea>
+        <button id="send-message">Send</button>
+      </div>
+    </div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
-
+    document.getElementById("close-chat").addEventListener("click", function() {
+      document.getElementById('chat-container').style.display = "none"
+    })
     document
       .getElementById("create-post")
       .addEventListener("click", function () {

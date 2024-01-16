@@ -9,20 +9,22 @@ function testSend() {
 
 function sendMessage(event) {
   event.preventDefault();
-  var recipient = event.target.dataset.recipient;
-  var message = document.getElementById("send-message").value;
-  conn.send(message + "|" + recipient);
 
+  var recipient = event.target.dataset.recipient;
+  var message = document.getElementById("message-input").value;
+  conn.send(message + "|" + recipient);
+  document.getElementById("message-input").value = ''
   let date = new Date();
   let day = String(date.getDate()).padStart(2, "0");
   let month = String(date.getMonth() + 1).padStart(2, "0");
   let year = date.getFullYear();
 
   let currentDate = month + "-" + day + "-" + year;
-  const chat = document.getElementById("chat");
+  const chat = document.getElementById("chat-messages");
 
   const container = document.createElement("div");
   container.classList.add("msg");
+  container.classList.add('user-sender')
   const h = document.createElement("h1");
   h.classList.add("sender");
   const p = document.createElement("p");
@@ -35,6 +37,7 @@ function sendMessage(event) {
 
   container.append(h, p, message);
   chat.append(container);
+  scrollToBottom()
 }
 
 function setupWs() {
@@ -45,8 +48,8 @@ function setupWs() {
   conn.onmessage = function (e) {
     let messageType = JSON.parse(e.data);
     if (messageType.type === "private_message") {
-      const chat = document.getElementById("chat");
-      if (chat) {
+      const chat = document.getElementById("chat-messages");
+      if (chat && messageType.sender == document.getElementById("chat-username").innerText) { 
         let message = messageType.message;
         let sender = messageType.sender;
         let time = messageType.time;
@@ -65,6 +68,7 @@ function setupWs() {
 
         container.append(h, p, message);
         chat.append(container);
+        scrollToBottom();
       } else {
         const topBar = document.querySelector(".top-bar");
         const popup = document.createElement("dialog");
@@ -114,7 +118,7 @@ function populateUsers() {
         div.dataset.user = user.nickname;
         div.dataset.status = user.status;
         div.addEventListener("click", function () {
-          navigate("chat", user.nickname);
+          goToChat(user.nickname);
         });
         const p = document.createElement("p");
         p.innerText = user.nickname;
@@ -126,15 +130,21 @@ function populateUsers() {
 
 function goToChat(recipient) {
   console.log("JOUJOUJOU", currentUser, recipient);
-  const btn = document.getElementById("submit-message");
+  const btn = document.getElementById("send-message");
   btn.dataset.recipient = recipient;
   btn.addEventListener("click", sendMessage);
+  document.getElementById("chat-username").textContent = recipient
+  const chatDiv = document.getElementById("chat-container")
+  chatDiv.style.display = "block"
+  const chat = document.getElementById("chat-messages");
+  chat.innerHTML = ''
   fetch(`/loadChat?user=${currentUser}&recipient=${recipient}`)
     .then((response) => response.json())
     .then((response) => {
       console.log(response);
-      const chat = document.getElementById("chat");
+      
       for (let msg of response) {
+        console.log("MSGGGGGG", msg)
         const container = document.createElement("div");
         container.classList.add("msg");
         const h = document.createElement("h1");
@@ -146,11 +156,18 @@ function goToChat(recipient) {
         h.innerText = msg.user;
         p.innerText = msg.timestamp;
         message.innerText = msg.message;
+        if(msg.user == currentUser)container.classList.add('user-sender')
 
         container.append(h, p, message);
         chat.append(container);
+        scrollToBottom();
       }
     });
+}
+
+function scrollToBottom() {
+  const chatMessages = document.getElementById("chat-messages");
+  chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
 export { populateUsers, setupWs, testSend, goToChat };
