@@ -1,7 +1,5 @@
 package structs
 
-import "time"
-
 type Post struct {
 	Poster     string   `json:"poster"`
 	Title      string   `json:"title"`
@@ -45,10 +43,10 @@ type Comment struct {
 }
 
 type Message struct {
-	User      string    `json:"user"`
-	Recipient string    `json:"recipient"`
-	Message   string    `json:"message"`
-	Timestamp time.Time `json:"timestamp"`
+	User               string `json:"user"`
+	Recipient          string `json:"recipient"`
+	Message            string `json:"message"`
+	FormattedTimestamp string `json:"formatted_timestamp"`
 }
 
 type MessageToJS struct {

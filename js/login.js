@@ -1,6 +1,6 @@
 import { setupWs } from "./websocket.js";
 
-let currentUser;
+
 
 function login() {
   var email = document.getElementById("email").value;
@@ -26,7 +26,6 @@ function login() {
     })
     .then(function (response) {
       if (response.loginSuccessful) {
-        currentUser = response.currentUser;
         //addCookie(response);
         setupWs();
         window.navigate("homepage");
@@ -45,4 +44,4 @@ function logout() {
   window.navigate("login");
 }
 
-export { login, currentUser, logout };
+export { login, logout };

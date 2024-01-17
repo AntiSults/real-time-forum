@@ -1,4 +1,4 @@
-import { currentUser } from "./login.js";
+
 
 function createPost() {
   var title = document.getElementById("title").value;
@@ -14,7 +14,7 @@ function createPost() {
     categories.push(document.getElementById("animal3").value);
   }
   var data = {
-    poster: currentUser,
+    poster: document.cookie.split('=')[1],
     title: title,
     content: content,
     categories: categories,
@@ -76,7 +76,7 @@ function submitComment() {
   let postID = document.getElementById("post-title").dataset.postid;
   var data = {
     postID: postID,
-    user: currentUser,
+    user: document.cookie.split('=')[1],
     comment: comment,
   };
   fetch("/comment", {
