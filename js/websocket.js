@@ -12,19 +12,19 @@ function sendMessage(event) {
   var recipient = event.target.dataset.recipient;
   var message = document.getElementById("message-input").value;
   conn.send(message + "|" + recipient);
-  document.getElementById("message-input").value = ''
+  document.getElementById("message-input").value = "";
   let date = new Date();
   let day = String(date.getDate()).padStart(2, "0");
   let month = String(date.getMonth() + 1).padStart(2, "0");
-  let minutes = String(date.getMinutes()).padStart(2, "0")
-  let hours = String(date.getHours()).padStart(2, "0")
+  let minutes = String(date.getMinutes()).padStart(2, "0");
+  let hours = String(date.getHours()).padStart(2, "0");
 
-  let currentDate = day + "-" + month + "  " + hours + "." + minutes
+  let currentDate = day + "-" + month + "  " + hours + "." + minutes;
   const chat = document.getElementById("chat-messages");
 
   const container = document.createElement("div");
   container.classList.add("msg");
-  container.classList.add('user-sender')
+  container.classList.add("user-sender");
   const h = document.createElement("h1");
   h.classList.add("sender");
   const p = document.createElement("p");
@@ -42,7 +42,7 @@ function sendMessage(event) {
 }
 
 function setupWs() {
-  let currentUser = document.cookie.split('=')[1]
+  let currentUser = document.cookie.split("=")[1];
   conn = new WebSocket("ws://localhost:5000/ws?username=" + currentUser);
   conn.onopen = function (e) {
     console.log("Connection established!");
@@ -52,7 +52,10 @@ function setupWs() {
     if (messageType.type === "private_message") {
       const chat = document.getElementById("chat-messages");
       populateUsers();
-      if (chat && messageType.sender == document.getElementById("chat-username").innerText) { 
+      if (
+        chat &&
+        messageType.sender == document.getElementById("chat-username").innerText
+      ) {
         let message = messageType.message;
         let sender = messageType.sender;
         let time = messageType.time;
@@ -103,7 +106,7 @@ function setupWs() {
 }
 
 function populateUsers() {
-  let currentUser = document.cookie.split('=')[1]
+  let currentUser = document.cookie.split("=")[1];
   fetch("/getUsers", {
     method: "POST",
     headers: {
@@ -114,8 +117,8 @@ function populateUsers() {
     .then((response) => response.json())
     .then((response) => {
       const userDiv = document.getElementById("users");
-      if(userDiv.childElementCount > 0){
-        userDiv.innerHTML = ''
+      if (userDiv.childElementCount > 0) {
+        userDiv.innerHTML = "";
       }
       for (let user of response) {
         console.log(user);
@@ -126,31 +129,33 @@ function populateUsers() {
         div.addEventListener("click", function () {
           goToChat(user.nickname);
         });
+        const span = document.createElement("span");
+        span.classList.add("activity");
         const p = document.createElement("p");
         p.innerText = user.nickname;
-        div.append(p);
+        div.append(span, p);
         userDiv.append(div);
       }
     });
 }
 
 function goToChat(recipient) {
-  let currentUser = document.cookie.split('=')[1]
+  let currentUser = document.cookie.split("=")[1];
   const btn = document.getElementById("send-message");
   btn.dataset.recipient = recipient;
   btn.addEventListener("click", sendMessage);
-  document.getElementById("chat-username").textContent = recipient
-  const chatDiv = document.getElementById("chat-container")
-  chatDiv.style.display = "block"
+  document.getElementById("chat-username").textContent = recipient;
+  const chatDiv = document.getElementById("chat-container");
+  chatDiv.style.display = "block";
   const chat = document.getElementById("chat-messages");
-  chat.innerHTML = ''
+  chat.innerHTML = "";
   fetch(`/loadChat?user=${currentUser}&recipient=${recipient}`)
     .then((response) => response.json())
     .then((response) => {
       console.log(response);
-      
+
       for (let msg of response) {
-        console.log("MSGGGGGG", msg)
+        console.log("MSGGGGGG", msg);
         const container = document.createElement("div");
         container.classList.add("msg");
         const h = document.createElement("h1");
@@ -162,9 +167,9 @@ function goToChat(recipient) {
         h.innerText = msg.user;
         p.innerText = msg.formatted_timestamp;
         message.innerText = msg.message;
-        if(msg.user == currentUser) {
-          container.classList.add('user-sender')
-          h.innerText = "me"
+        if (msg.user == currentUser) {
+          container.classList.add("user-sender");
+          h.innerText = "me";
         }
         container.append(h, p, message);
         chat.append(container);

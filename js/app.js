@@ -11,6 +11,7 @@ var pages = {
     }
     var html = `<div class="registration">
         <form action="/register">
+          <h1>Register a new account</h1>
           <label for="nickname">Nickname:</label>
           <input type="text" id="nickname" name="nickname" placeholder="Nickname [2+ characters]"required />
           <label for="age">age:</label>
@@ -57,17 +58,26 @@ var pages = {
   login: function () {
     var html = `<div class="container">
       <div class="login">
+        <h1>Log into your account</h1>
         <form action="/login">
-          <label for="email">Email: </label>
+          <label for="email">Email/username: </label>
           <input type="text" id="email" name="email" required/>
           <label for="password">Password: </label>
           <input type="password" id="password" name="password" required/>
           <button id="submitlogin">Log in</button>
         </form>
       </div>
+      <div id="redirect-registration">
+          <a href="#" id="register-redirect">Register a new account</a>
+        </div>
     </div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
+    document
+      .getElementById("register-redirect")
+      .addEventListener("click", () => {
+        navigate("register");
+      });
     document
       .getElementById("submitlogin")
       .addEventListener("click", function (event) {
@@ -101,9 +111,11 @@ var pages = {
     </div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
-    document.getElementById("close-chat").addEventListener("click", function() {
-      document.getElementById('chat-container').style.display = "none"
-    })
+    document
+      .getElementById("close-chat")
+      .addEventListener("click", function () {
+        document.getElementById("chat-container").style.display = "none";
+      });
     document
       .getElementById("create-post")
       .addEventListener("click", function () {

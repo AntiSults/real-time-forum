@@ -7,45 +7,110 @@
     <title>Document</title>
   </head>
   <body>
-    <div id="app"><div class="top-bar">
-      <div class="bar-content">
-        <button id="home">HOME</button>
-        <button id="create-post">New post!</button>
-        <button id="pm">PM</button>
-        <h id="current-user">temp</h>
-        <button id="logout">Log out</button>
+    <div id="app">
+      <div class="top-bar">
+        <div class="bar-content">
+          <button id="home">HOME</button>
+          <button id="create-post">New post!</button>
+          <h id="current-user">anti</h>
+          <button id="logout">Log out</button>
+        </div>
+      </div>
+      <div id="homePageContainer">
+        <div class="content" id="content">
+          <div id="posts">
+            <div class="post" data-postid="1">
+              <h1 class="post-title">
+                Ikka veel armastan sind meeletult mu printsess
+              </h1>
+              <h2 class="post-poster">anti</h2>
+            </div>
+            <div class="post" data-postid="2">
+              <h1 class="post-title">addddddd</h1>
+              <h2 class="post-poster">anti</h2>
+            </div>
+            <div class="post" data-postid="3">
+              <h1 class="post-title">a</h1>
+              <h2 class="post-poster">anti</h2>
+            </div>
+            <div class="post" data-postid="4">
+              <h1 class="post-title">Reeeeeeee</h1>
+              <h2 class="post-poster">Antiboyy</h2>
+            </div>
+            <div class="post" data-postid="5">
+              <h1 class="post-title">5miinust</h1>
+              <h2 class="post-poster">Antiboyy</h2>
+            </div>
+            <div class="post" data-postid="6">
+              <h1 class="post-title">peep</h1>
+              <h2 class="post-poster">Antiboyy</h2>
+            </div>
+            <div class="post" data-postid="7">
+              <h1 class="post-title">dddd</h1>
+              <h2 class="post-poster">Antiboyy</h2>
+            </div>
+            <div class="post" data-postid="8">
+              <h1 class="post-title">vihkan ANTIBOYY-d</h1>
+              <h2 class="post-poster">marko</h2>
+            </div>
+          </div>
+        </div>
+        <div id="users">
+          <div class="user" data-user="temp" data-status="offline">
+            <span class="activity"></span>
+            <p>temp</p>
+          </div>
+          <div class="user" data-user="marko" data-status="offline">
+            <p>marko</p>
+          </div>
+          <div class="user" data-user="Kakapeer" data-status="offline">
+            <p>Kakapeer</p>
+          </div>
+          <div class="user" data-user="Antiboyy" data-status="offline">
+            <p>Antiboyy</p>
+          </div>
+          <div class="user" data-user="puuks" data-status="offline">
+            <p>puuks</p>
+          </div>
+          <div class="user" data-user="puuksu" data-status="offline">
+            <p>puuksu</p>
+          </div>
+          <div class="user" data-user="Ants" data-status="offline">
+            <p>Ants</p>
+          </div>
+          <div class="user" data-user="linux" data-status="offline">
+            <p>linux</p>
+          </div>
+          <div class="user" data-user="anti86" data-status="offline">
+            <p>anti86</p>
+          </div>
+          <div class="user" data-user="a" data-status="offline"><p>a</p></div>
+          <div class="user" data-user="kaka" data-status="offline">
+            <p>kaka</p>
+          </div>
+          <div class="user" data-user="antiPEDE" data-status="offline">
+            <p>antiPEDE</p>
+          </div>
+          <div class="user" data-user="admin" data-status="offline">
+            <p>admin</p>
+          </div>
+          <div class="user" data-user="Lauri89" data-status="offline">
+            <p>Lauri89</p>
+          </div>
+        </div>
+        <div id="chat-container">
+          <div id="chat-header">
+            <span id="chat-title"><span id="chat-username"></span></span>
+            <button id="close-chat">❌</button>
+          </div>
+          <div id="chat-messages"></div>
+          <textarea
+            id="message-input"
+            placeholder="Type your message"
+          ></textarea>
+          <button id="send-message">Send</button>
+        </div>
       </div>
     </div>
-    <div id="homePageContainer">
-      <div class="content" id="content"><div id="posts"><div class="post" data-postid="1">
-          <h1 class="post-title">Ikka veel armastan sind meeletult mu printsess</h1>
-          <h2 class="post-poster">anti</h2></div><div class="post" data-postid="2">
-          <h1 class="post-title">addddddd</h1>
-          <h2 class="post-poster">anti</h2></div><div class="post" data-postid="3">
-          <h1 class="post-title">a</h1>
-          <h2 class="post-poster">anti</h2></div><div class="post" data-postid="4">
-          <h1 class="post-title">Reeeeeeee</h1>
-          <h2 class="post-poster">Antiboyy</h2></div><div class="post" data-postid="5">
-          <h1 class="post-title">5miinust</h1>
-          <h2 class="post-poster">Antiboyy</h2></div><div class="post" data-postid="6">
-          <h1 class="post-title">peep</h1>
-          <h2 class="post-poster">Antiboyy</h2></div><div class="post" data-postid="7">
-          <h1 class="post-title">dddd</h1>
-          <h2 class="post-poster">Antiboyy</h2></div><div class="post" data-postid="8">
-          <h1 class="post-title">vihkan ANTIBOYY-d</h1>
-          <h2 class="post-poster">marko</h2></div></div></div>
-      <div id="users"><div class="user" data-user="anti" data-status="online"><p>anti</p></div><div class="user" data-user="Antiboyy" data-status="offline"><p>Antiboyy</p></div><div class="user" data-user="marko" data-status="offline"><p>marko</p></div><div class="user" data-user="puuks" data-status="offline"><p>puuks</p></div><div class="user" data-user="Kakapeer" data-status="offline"><p>Kakapeer</p></div><div class="user" data-user="puuksu" data-status="offline"><p>puuksu</p></div><div class="user" data-user="Ants" data-status="offline"><p>Ants</p></div><div class="user" data-user="anti86" data-status="offline"><p>anti86</p></div><div class="user" data-user="linux" data-status="offline"><p>linux</p></div><div class="user" data-user="a" data-status="offline"><p>a</p></div><div class="user" data-user="kaka" data-status="offline"><p>kaka</p></div><div class="user" data-user="antiPEDE" data-status="offline"><p>antiPEDE</p></div><div class="user" data-user="Lauri89" data-status="offline"><p>Lauri89</p></div><div class="user" data-user="admin" data-status="offline"><p>admin</p></div></div>
-      <div id="chat-container" style="display: block;">
-        <div id="chat-header">
-          <span id="chat-title"><span id="chat-username">anti</span></span>
-          <button id="close-chat">❌</button>
-        </div>
-        <div id="chat-messages"><div class="msg"><h1 class="sender">temp</h1><p class="timestamp">2024-01-16T09:13:42Z</p><p class="message">dzau<br></p></div><div class="msg"><h1 class="sender">temp</h1><p class="timestamp">2024-01-16T09:16:37Z</p><p class="message">yooou</p></div><div class="msg"><h1 class="sender">temp</h1><p class="timestamp">2024-01-16T09:17:32Z</p><p class="message">asddd</p></div><div class="msg"><h1 class="sender">temp</h1><p class="timestamp">2024-01-16T09:19:12Z</p><p class="message">s</p></div><div class="msg"><h1 class="sender">temp</h1><p class="timestamp">2024-01-16T09:19:54Z</p><p class="message">yooooo</p></div><div class="msg"><h1 class="sender">anti</h1><p class="timestamp">2024-01-16T09:20:44Z</p><p class="message">wasup</p></div><div class="msg"><h1 class="sender">temp</h1><p class="timestamp">2024-01-16T09:23:58Z</p><p class="message">s</p></div><div class="msg"><h1 class="sender">temp</h1><p class="timestamp">2024-01-16T09:24:07Z</p><p class="message">timkar<br></p></div><div class="msg"><h1 class="sender">anti</h1><p class="timestamp">2024-01-16T09:25:18Z</p><p class="message">s</p></div><div class="msg"><h1 class="sender">temp</h1><p class="timestamp">2024-01-16T09:25:42Z</p><p class="message">hallo</p></div><div class="msg"><h1 class="sender">anti</h1><p class="timestamp">2024-01-16T09:25:53Z</p><p class="message">yoyo</p></div><div class="msg"><h1 class="sender">anti</h1><p class="timestamp">2024-01-16T09:26:03Z</p><p class="message">n1ggaaaa</p></div><div class="msg user-sender"><h1 class="sender">temp</h1><p class="timestamp">2024-01-16T09:31:16Z</p><p class="message">watafaaak</p></div></div>
-        <textarea id="message-input" placeholder="Type your message"></textarea>
-        <button id="send-message" data-recipient="anti">Send</button>
-      </div>
-    </div></div>
-  
-
-</body>
+  </body>
 </html>
