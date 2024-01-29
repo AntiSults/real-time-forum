@@ -155,9 +155,24 @@ var pages = {
         <textarea name="content" id="content" cols="30" rows="10"></textarea>
         <button id="submit-post">Post!</button>
       </form>
-    </div>`;
+    </div>
+    <div id="users"></div>
+    <div id="chat-container">
+        <div id="chat-header">
+          <span id="chat-title"><span id="chat-username"></span></span>
+          <button id="close-chat">❌</button>
+        </div>
+        <div id="chat-messages"></div>
+        <textarea id="message-input" placeholder="Type your message"></textarea>
+        <button id="send-message">Send</button>
+      </div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
+    document
+      .getElementById("close-chat")
+      .addEventListener("click", function () {
+        document.getElementById("chat-container").style.display = "none";
+      });
     document
       .getElementById("submit-post")
       .addEventListener("click", function (event) {
@@ -167,6 +182,7 @@ var pages = {
     document.getElementById("home").addEventListener("click", function () {
       navigate("homepage");
     });
+    populateUsers();
   },
   postPage: function () {
     var html = `<div class="top-bar">
@@ -195,9 +211,24 @@ var pages = {
         <button id="comment-submit">Comment!</button>
       </form>
     </div>
-    <div id="comment-section"></div>`;
+    <div id="comment-section"></div>
+    <div id="users"></div>
+      <div id="chat-container">
+        <div id="chat-header">
+          <span id="chat-title"><span id="chat-username"></span></span>
+          <button id="close-chat">❌</button>
+        </div>
+        <div id="chat-messages"></div>
+        <textarea id="message-input" placeholder="Type your message"></textarea>
+        <button id="send-message">Send</button>
+      </div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
+    document
+      .getElementById("close-chat")
+      .addEventListener("click", function () {
+        document.getElementById("chat-container").style.display = "none";
+      });
     document
       .getElementById("create-post")
       .addEventListener("click", function () {
@@ -212,6 +243,7 @@ var pages = {
         e.preventDefault();
         submitComment();
       });
+    populateUsers();
   },
   pm: function () {
     var html = `

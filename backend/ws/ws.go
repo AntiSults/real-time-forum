@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"real-time-forum/backend/db"
 	"real-time-forum/backend/structs"
+	"strconv"
 	"strings"
 	"time"
 
@@ -179,11 +180,24 @@ func LoadChat(w http.ResponseWriter, r *http.Request) {
 	defer db.Close()
 
 	messages := make([]structs.Message, 0)
-	rows, err := db.Query(`
-    SELECT user, recipient, message, strftime('%d-%m %H.%M', timestamp, 'localtime') AS formatted_timestamp
-    FROM messages
-    WHERE (user = ? AND recipient = ?) OR (user = ? AND recipient = ?)
-`, username, recipient, recipient, username)
+	
+	offset := r.URL.Query().Get("offset")
+	fmt.Println("offset str: ", offset)
+	offsetInt, err := strconv.Atoi(offset)
+    if err != nil {
+        http.Error(w, "Invalid offset parameter", http.StatusBadRequest)
+        return
+    }
+	fmt.Println("offset: ", offsetInt)
+	fmt.Println("user: ", username)
+	fmt.Println("user: ", recipient)
+	
+  	rows, err := db.Query(`
+    	SELECT user, recipient, message, strftime('%d-%m %H.%M', timestamp, 'localtime') AS formatted_timestamp
+    	FROM messages
+    	WHERE (user = ? AND recipient = ?) OR (user = ? AND recipient = ?)
+    	ORDER BY timestamp DESC LIMIT 10 OFFSET ?
+  	`, username, recipient, recipient, username, offsetInt)
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
 	}

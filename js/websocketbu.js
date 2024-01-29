@@ -140,93 +140,47 @@ function populateUsers() {
 }
 
 function goToChat(recipient) {
-  console.log("recipient: ", recipient);
   let currentUser = document.cookie.split("=")[1];
   const btn = document.getElementById("send-message");
-  if (!btn.dataset.listenerAdded) {
-    btn.dataset.recipient = recipient;
-    btn.addEventListener("click", sendMessage);
-    btn.dataset.listenerAdded = true; // Set the flag
-  }
+  btn.dataset.recipient = recipient;
+  btn.addEventListener("click", sendMessage);
   document.getElementById("chat-username").textContent = recipient;
   const chatDiv = document.getElementById("chat-container");
   chatDiv.style.display = "block";
   const chat = document.getElementById("chat-messages");
   chat.innerHTML = "";
-  const clone = chat.cloneNode(true);
-  chat.parentNode.replaceChild(clone, chat);
-  console.log("initial: ", currentUser, recipient);
-  const loaded = document.getElementById("chat-messages");
-  loadInitialMessages(currentUser, recipient, loaded);
+  fetch(`/loadChat?user=${currentUser}&recipient=${recipient}`)
+    .then((response) => response.json())
+    .then((response) => {
+      console.log(response);
+
+      for (let msg of response) {
+        console.log("MSGGGGGG", msg);
+        const container = document.createElement("div");
+        container.classList.add("msg");
+        const h = document.createElement("h1");
+        h.classList.add("sender");
+        const p = document.createElement("p");
+        p.classList.add("timestamp");
+        const message = document.createElement("p");
+        message.classList.add("message");
+        h.innerText = msg.user;
+        p.innerText = msg.formatted_timestamp;
+        message.innerText = msg.message;
+        if (msg.user == currentUser) {
+          container.classList.add("user-sender");
+          h.innerText = "me";
+        }
+        container.append(h, p, message);
+        chat.append(container);
+        scrollToBottom();
+      }
+    });
 }
 
 function scrollToBottom() {
   const chatMessages = document.getElementById("chat-messages");
   chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-function fetchMessages(offset, currentUser, recipient) {
-  console.log("os", offset, currentUser, recipient);
-  fetch(`/loadChat?user=${currentUser}&recipient=${recipient}&offset=${offset}`)
-    .then((response) => response.json())
-    .then((response) => {
-      if (response.length > 0) {
-        const chat = document.getElementById("chat-messages");
-
-        for (let msg of response) {
-          const container = document.createElement("div");
-          container.classList.add("msg");
-          const h = document.createElement("h1");
-          h.classList.add("sender");
-          const p = document.createElement("p");
-          p.classList.add("timestamp");
-          const message = document.createElement("p");
-          message.classList.add("message");
-          h.innerText = msg.user;
-          p.innerText = msg.formatted_timestamp;
-          message.innerText = msg.message;
-          if (msg.user == currentUser) {
-            container.classList.add("user-sender");
-            h.innerText = "me";
-          }
-          container.append(h, p, message);
-          chat.prepend(container);
-        }
-
-        scrollToCurrentPosition(offset);
-        // offset += response.length;
-        // console.log(response.length, "rlength");
-      }
-    });
-}
-
-function loadInitialMessages(currentUser, recipient, loaded) {
-  //TRA KÜLL SEE LISAB JOBISID EVENT LISTENERE IGA KORD JA NEED FAKING KORDUVAD AAAAAAAAAAAAAAAAAAAAAAAA
-
-  loaded.addEventListener("scroll", function () {
-    if (loaded.scrollTop === 0) {
-      console.log("Scrollbar is at the top!", currentUser, recipient);
-      loadMoreMessages(currentUser, recipient);
-    }
-  });
-
-  fetchMessages(0, currentUser, recipient); // Load the initial batch of messages
-  //scrollToBottom();
-}
-
-function loadMoreMessages(currentUser, recipient) {
-  const chat = document.getElementById("chat-messages");
-  //const currentScrollPosition = chat.scrollTop;
-  console.log("laste arv", chat.childElementCount);
-  let offset = chat.childElementCount;
-  fetchMessages(offset, currentUser, recipient);
-}
-
-function scrollToCurrentPosition(offset) {
-  console.log(offset);
-  const chatMessages = document.getElementById("chat-messages");
-  if (offset == 0) offset = 1196;
-  chatMessages.scrollTop = offset;
 }
 
 export { populateUsers, setupWs, testSend, goToChat };
