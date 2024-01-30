@@ -89,11 +89,14 @@ var pages = {
   homepage: function () {
     var html = `<div class="top-bar">
       <div class="bar-content">
+        <div class="left-content">
         <button id="home">HOME</button>
         <button id="create-post">New post!</button>
-        <button id="pm">PM</button>
-        <h id="current-user"></h>
-        <button id="logout">Log out</button>
+      </div>
+    <div class="right-content">
+      <h id="current-user"></h>
+      <button id="logout">Log out</button>
+    </div>
       </div>
     </div>
     <div id=homePageContainer>
@@ -124,10 +127,7 @@ var pages = {
     document.getElementById("home").addEventListener("click", function () {
       navigate("homepage");
     });
-    document.getElementById("pm").addEventListener("click", function () {
-      //setupWs();
-      navigate("pm");
-    });
+
     document.getElementById("logout").addEventListener("click", logout);
     document.getElementById("current-user").innerText = getUserFromCookie(
       document.cookie
@@ -138,7 +138,13 @@ var pages = {
   createPost: function () {
     var html = `<div class="top-bar">
       <div class="bar-content">
+        <div class="left-content">
         <button id="home">HOME</button>
+      </div>
+    <div class="right-content">
+      <h id="current-user"></h>
+      <button id="logout">Log out</button>
+    </div>
       </div>
     </div>
     <div class="post-creating">
@@ -168,6 +174,7 @@ var pages = {
       </div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
+
     document
       .getElementById("close-chat")
       .addEventListener("click", function () {
@@ -178,17 +185,28 @@ var pages = {
       .addEventListener("click", function (event) {
         event.preventDefault();
         createPost();
+        navigate("homepage");
       });
     document.getElementById("home").addEventListener("click", function () {
       navigate("homepage");
     });
+    document.getElementById("logout").addEventListener("click", logout);
+    document.getElementById("current-user").innerText = getUserFromCookie(
+      document.cookie
+    );
     populateUsers();
   },
   postPage: function () {
     var html = `<div class="top-bar">
       <div class="bar-content">
+        <div class="left-content">
         <button id="home">HOME</button>
         <button id="create-post">New post!</button>
+      </div>
+    <div class="right-content">
+      <h id="current-user"></h>
+      <button id="logout">Log out</button>
+    </div>
       </div>
     </div>
     <div id="post-page-container">
@@ -224,6 +242,10 @@ var pages = {
       </div>`;
     var appDiv = document.getElementById("app");
     appDiv.innerHTML = html;
+    document.getElementById("logout").addEventListener("click", logout);
+    document.getElementById("current-user").innerText = getUserFromCookie(
+      document.cookie
+    );
     document
       .getElementById("close-chat")
       .addEventListener("click", function () {

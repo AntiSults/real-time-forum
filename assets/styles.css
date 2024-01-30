@@ -67,6 +67,13 @@
   left: 0;
   display: flex;
 }
+
+.bar-content {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .content {
   width: max-content;
   margin-top: 50px;

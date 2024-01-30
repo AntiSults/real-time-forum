@@ -166,6 +166,7 @@ function scrollToBottom() {
 }
 
 function fetchMessages(offset, currentUser, recipient) {
+  let temp = document.getElementById("chat-messages").scrollTop;
   console.log("os", offset, currentUser, recipient);
   fetch(`/loadChat?user=${currentUser}&recipient=${recipient}&offset=${offset}`)
     .then((response) => response.json())
@@ -192,8 +193,8 @@ function fetchMessages(offset, currentUser, recipient) {
           container.append(h, p, message);
           chat.prepend(container);
         }
-
-        scrollToCurrentPosition(offset);
+        scrollToCurrentPosition(temp);
+        //scrollToCurrentPosition(offset);
         // offset += response.length;
         // console.log(response.length, "rlength");
       }
