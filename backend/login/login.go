@@ -60,7 +60,6 @@ func getUser(email string) (string, error) {
 func loginSuccessful(data map[string]string) (bool, string) {
 	db := db.OpenDatabase()
 	defer db.Close()
-	fmt.Println("email", data["email"], "user",data["username"])
 	var hashedPassword string
 		err := db.QueryRow("SELECT password FROM users WHERE email = ? OR nick = ?", data["email"], data["email"]).Scan(&hashedPassword)
 		if err != nil{

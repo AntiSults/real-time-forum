@@ -50,7 +50,6 @@ var pages = {
     document
       .getElementById("login")
       .addEventListener("click", function (event) {
-        console.log(event);
         event.preventDefault();
         navigate("login");
       });

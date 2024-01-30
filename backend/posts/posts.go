@@ -64,7 +64,6 @@ func PostPage(w http.ResponseWriter, r *http.Request){
 		if err != nil {
 			json.NewEncoder(w).Encode(`error getting query`)
 		}
-		fmt.Println(p.Content)
 		w.Header().Set("Content-Type", "application/json")
 		err = json.NewEncoder(w).Encode(p)
 		if err != nil {
@@ -81,7 +80,6 @@ func SubmitComment(w http.ResponseWriter, r *http.Request){
 		json.NewDecoder(r.Body).Decode(&comment)
 		
 		_, err := db.Exec("INSERT INTO comments (commenter, comment, postID) values (?,?,?)", comment.User, comment.Comment, comment.PostID)
-		fmt.Println(comment)
 		if err != nil {
 			fmt.Println(err)
 			json.NewEncoder(w).Encode("error inserting")
@@ -103,7 +101,6 @@ func ShowComments(w http.ResponseWriter, r *http.Request){
 		for rows.Next() {
 			var comment structs.Comment
 			err := rows.Scan(&comment.ID, &comment.User, &comment.Comment, &comment.PostID)
-			fmt.Println("comments:", comments)
 			if err != nil {
 				json.NewEncoder(w).Encode(err)
 			}

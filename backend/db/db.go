@@ -49,7 +49,6 @@ func InsertUser(u structs.User) error{
 		log.Fatal(err)
 	}
 	if count != 0 {
-		//KUIDAGI NÄIDATA ET KASUTAJA OLEMAS
 		return fmt.Errorf("user already exists")
 	} else {
 		hashedPW, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)

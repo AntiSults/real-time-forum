@@ -115,9 +115,8 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	err = db.QueryRow(query, users.CurrentUser, users.CurrentUser).Scan(&count)
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
-		fmt.Println("perse majas", err)
+		fmt.Println(err)
 	}
-	fmt.Println("Count: ", count, "user", users.CurrentUser)
 	var rows *sql.Rows
 	if count > 0 {
 		//Order by messages
@@ -135,7 +134,7 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 	//rows, err := db.Query("SELECT nick, age, gender, email, fname, lname FROM users ORDER BY nick COLLATE NOCASE")
 	if err != nil {
 		json.NewEncoder(w).Encode(err)
-		fmt.Println("perse majas", err)
+		fmt.Println(err)
 	}
 	usersArr := make([]structs.PublicUser, 0)
 	for rows.Next() {
@@ -166,9 +165,6 @@ func GetUsersHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	w.Header().Set("Content-Type", "application/json")
-	for _, user := range usersArr {
-		fmt.Println(user.Nickname)
-	}
 	json.NewEncoder(w).Encode(usersArr)
 }
 
@@ -182,15 +178,11 @@ func LoadChat(w http.ResponseWriter, r *http.Request) {
 	messages := make([]structs.Message, 0)
 	
 	offset := r.URL.Query().Get("offset")
-	fmt.Println("offset str: ", offset)
 	offsetInt, err := strconv.Atoi(offset)
     if err != nil {
         http.Error(w, "Invalid offset parameter", http.StatusBadRequest)
         return
     }
-	fmt.Println("offset: ", offsetInt)
-	fmt.Println("user: ", username)
-	fmt.Println("user: ", recipient)
 	
   	rows, err := db.Query(`
     	SELECT user, recipient, message, strftime('%d-%m %H.%M', timestamp, 'localtime') AS formatted_timestamp
@@ -207,7 +199,6 @@ func LoadChat(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			json.NewEncoder(w).Encode(err)
 		}
-		fmt.Println(message)
 		messages = append(messages, message)
 	}
 	w.Header().Set("Content-Type", "application/json")

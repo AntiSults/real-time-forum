@@ -1,5 +1,3 @@
-
-
 function createPost() {
   var title = document.getElementById("title").value;
   var content = document.getElementById("content").value;
@@ -14,7 +12,7 @@ function createPost() {
     categories.push(document.getElementById("animal3").value);
   }
   var data = {
-    poster: document.cookie.split('=')[1],
+    poster: document.cookie.split("=")[1],
     title: title,
     content: content,
     categories: categories,
@@ -33,7 +31,6 @@ function createPost() {
       return response.json();
     })
     .then(function (response) {
-      console.log(response);
       if (response === "success") {
         window.navigate("homepage");
       }
@@ -50,7 +47,6 @@ function showPosts() {
       const postsDiv = document.createElement("div");
       postsDiv.setAttribute("id", "posts");
       for (let post of posts) {
-        console.log(post);
         let html = `
           <h1 class="post-title">${post.title}</h1>
           <h2 class="post-poster">${post.poster}</h2>`;
@@ -76,7 +72,7 @@ function submitComment() {
   let postID = document.getElementById("post-title").dataset.postid;
   var data = {
     postID: postID,
-    user: document.cookie.split('=')[1],
+    user: document.cookie.split("=")[1],
     comment: comment,
   };
   fetch("/comment", {
@@ -116,7 +112,6 @@ function goToPostPage(id) {
     .then((response) => response.json())
     .then((response) => {
       for (let comment of response) {
-        console.log(comment);
         const commentDiv = document.getElementById("comment-section");
         const div = document.createElement("div");
         div.classList.add("comment-comment");

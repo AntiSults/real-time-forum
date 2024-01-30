@@ -89,11 +89,9 @@ function setupWs() {
         }, 5000);
       }
     } else if (messageType.type === "user_status_update") {
-      console.log(messageType);
       let userDiv = document.querySelector(
         `div[data-user="${messageType.user}"]`
       );
-      console.log(userDiv);
       if (userDiv) {
         if (messageType.status === "online") {
           userDiv.dataset.status = "online";
@@ -121,7 +119,6 @@ function populateUsers() {
         userDiv.innerHTML = "";
       }
       for (let user of response) {
-        console.log(user);
         const div = document.createElement("div");
         div.classList.add("user");
         div.dataset.user = user.nickname;
@@ -140,7 +137,6 @@ function populateUsers() {
 }
 
 function goToChat(recipient) {
-  console.log("recipient: ", recipient);
   let currentUser = document.cookie.split("=")[1];
   const btn = document.getElementById("send-message");
   if (!btn.dataset.listenerAdded) {
@@ -155,7 +151,6 @@ function goToChat(recipient) {
   chat.innerHTML = "";
   const clone = chat.cloneNode(true);
   chat.parentNode.replaceChild(clone, chat);
-  console.log("initial: ", currentUser, recipient);
   const loaded = document.getElementById("chat-messages");
   loadInitialMessages(currentUser, recipient, loaded);
 }
@@ -167,7 +162,6 @@ function scrollToBottom() {
 
 function fetchMessages(offset, currentUser, recipient) {
   let temp = document.getElementById("chat-messages").scrollTop;
-  console.log("os", offset, currentUser, recipient);
   fetch(`/loadChat?user=${currentUser}&recipient=${recipient}&offset=${offset}`)
     .then((response) => response.json())
     .then((response) => {
@@ -194,37 +188,27 @@ function fetchMessages(offset, currentUser, recipient) {
           chat.prepend(container);
         }
         scrollToCurrentPosition(temp);
-        //scrollToCurrentPosition(offset);
-        // offset += response.length;
-        // console.log(response.length, "rlength");
       }
     });
 }
 
 function loadInitialMessages(currentUser, recipient, loaded) {
-  //TRA KÜLL SEE LISAB JOBISID EVENT LISTENERE IGA KORD JA NEED FAKING KORDUVAD AAAAAAAAAAAAAAAAAAAAAAAA
-
   loaded.addEventListener("scroll", function () {
     if (loaded.scrollTop === 0) {
-      console.log("Scrollbar is at the top!", currentUser, recipient);
       loadMoreMessages(currentUser, recipient);
     }
   });
 
-  fetchMessages(0, currentUser, recipient); // Load the initial batch of messages
-  //scrollToBottom();
+  fetchMessages(0, currentUser, recipient);
 }
 
 function loadMoreMessages(currentUser, recipient) {
   const chat = document.getElementById("chat-messages");
-  //const currentScrollPosition = chat.scrollTop;
-  console.log("laste arv", chat.childElementCount);
   let offset = chat.childElementCount;
   fetchMessages(offset, currentUser, recipient);
 }
 
 function scrollToCurrentPosition(offset) {
-  console.log(offset);
   const chatMessages = document.getElementById("chat-messages");
   if (offset == 0) offset = 1196;
   chatMessages.scrollTop = offset;
